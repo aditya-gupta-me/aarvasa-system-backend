@@ -23,6 +23,14 @@ services:
     networks:
       - aarvasa-net
 
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - aarvasa-net
+
 networks:
   aarvasa-net:
     driver: bridge
