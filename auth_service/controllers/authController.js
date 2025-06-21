@@ -6,19 +6,33 @@ const generateOtp = require("../utils/generateOtp");
 
 exports.signup = async (req, res) => {
   const { email, password } = req.body;
+
   const existing = await User.findOne({ email });
-  if (existing) return res.status(400).json({ msg: "Email already in use" });
+  if (existing) {
+    return res.status(400).json({ success: false, msg: "Email already in use" });
+  }
 
-  const otp = generateOtp();
-  const otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
+  try {
+    const otp = generateOtp();
+    const otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
 
-  await sendMail(email, "Verify your email", `Your OTP is: ${otp}`);
+    await sendMail(email, "Verify your email", `Your OTP is: ${otp}`);
 
-  const hashed = await bcrypt.hash(password, 10);
-  const user = new User({ email, password: hashed, otp, otpExpiry });
-  await user.save();
+    const hashed = await bcrypt.hash(password, 10);
+    const user = new User({ email, password: hashed, otp, otpExpiry });
+    await user.save();
 
-  res.json({ msg: "OTP sent to email" });
+    return res.status(200).json({
+      success: true,
+      message: "OTP sent to email",
+    });
+  } catch (err) {
+    console.error("Signup Error:", err.message);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to send OTP",
+    });
+  }
 };
 
 exports.verifyOtp = async (req, res) => {
