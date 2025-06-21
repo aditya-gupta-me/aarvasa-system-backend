@@ -1,0 +1,134 @@
+[
+  {
+    "name": "Team Facebook Link",
+    "description": "Team member's Facebook profile",
+    "path": "/about/team",
+    "source": "/src/components/About/Team.jsx"
+  },
+  {
+    "name": "Team LinkedIn Link",
+    "description": "Team member's LinkedIn profile",
+    "path": "/about/team",
+    "source": "/src/components/About/Team.jsx"
+  },
+  {
+    "name": "Forgot Password",
+    "description": "Forgot your password? Reset here",
+    "path": "/forgot-password",
+    "source": "/src/components/Auth/SignIn.jsx"
+  },
+  {
+    "name": "Signup Page",
+    "description": "Sign up for a new account",
+    "path": "/signup",
+    "source": "/src/components/Auth/SignIn.jsx"
+  },
+  {
+    "name": "Signin Page",
+    "description": "Sign in to your account",
+    "path": "/signin",
+    "source": "/src/components/Auth/SignUp.jsx"
+  },
+  {
+    "name": "Chatbot Home",
+    "description": "Homepage navigation or chatbot access",
+    "path": "/",
+    "source": "/src/components/Chatbot/NavbarChatbot.jsx"
+  },
+  {
+    "name": "Dynamic Chatbot Link",
+    "description": "Dynamic chatbot navigation link",
+    "path": "/",
+    "source": "/src/components/Chatbot/NavbarChatbot.jsx"
+  },
+  {
+    "name": "Tools Section",
+    "description": "Tools and advice section",
+    "path": "/tools",
+    "source": "/src/components/Home/AdvicesTools.jsx"
+  },
+  {
+    "name": "OpenStreetMap Attribution",
+    "description": "OpenStreetMap attribution",
+    "path": "https://www.openstreetmap.org/copyright",
+    "source": "/src/components/Home/Geographic.jsx"
+  },
+  {
+    "name": "Property Listings Page",
+    "description": "Property listings page",
+    "path": "/listings",
+    "source": "/src/components/listing/Page.jsx"
+  },
+  {
+    "name": "Property Details Page",
+    "description": "Specific property details page",
+    "path": "/listings/propertydetails/:propertyId",
+    "source": "/src/components/listing/Property.jsx"
+  },
+  {
+    "name": "Main Homepage",
+    "description": "Main website homepage",
+    "path": "/",
+    "source": "/src/components/Navbar.jsx"
+  },
+  {
+    "name": "About Page",
+    "description": "About us page",
+    "path": "/about",
+    "source": "/src/components/Navbar.jsx"
+  },
+  {
+    "name": "Agent Services",
+    "description": "Agent-related services",
+    "path": "/agent",
+    "source": "/src/components/Navbar.jsx"
+  },
+  {
+    "name": "Services Page",
+    "description": "Our services",
+    "path": "/services",
+    "source": "/src/components/Navbar.jsx"
+  },
+  {
+    "name": "Property Listings Link",
+    "description": "Property listings",
+    "path": "/listings",
+    "source": "/src/components/Navbar.jsx"
+  },
+  {
+    "name": "User Profile",
+    "description": "User profile page",
+    "path": "/profile",
+    "source": "/src/components/Navbar.jsx"
+  },
+  {
+    "name": "Transaction History",
+    "description": "User transaction history",
+    "path": "/profile/transaction",
+    "source": "/src/components/profile/MainProfile.jsx"
+  },
+  {
+    "name": "Guides Section",
+    "description": "User guides and help section",
+    "path": "/profile/guides",
+    "source": "/src/components/profile/MainProfile.jsx"
+  },
+  {
+    "name": "Subscription Page",
+    "description": "Subscription management page",
+    "path": "/subscription",
+    "source": "/src/components/profile/MainProfile.jsx"
+  },
+  {
+    "name": "Rate Trends",
+    "description": "Rate and trend analysis of listings",
+    "path": "/listings/ratestrends",
+    "source": "/src/pages/Listing.jsx"
+  },
+  {
+    "name": "Add Property Listing",
+    "description": "Add a new property listing",
+    "path": "/AddListing",
+    "source": "/src/pages/Listing.jsx"
+  }
+]
