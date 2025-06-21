@@ -19,8 +19,9 @@ system_instructions = (
     "If neither helps, still try to give your best answer in a clear, short, and persuasive way. "
     "If users ask to 'show properties under a price' (e.g., under 30 lakhs), inform them to visit the Listings or Search page. "
     "Avoid going off-topic and keep your response brief (within 3 lines unless really needed). "
-    "If you don’t know, don’t cook up — be honest and tell the user you don’t know."
+    "If you dont know dont cook up be honest and tell dont know."
 )
+
 
 
 # Initialize both RAG engines
@@ -29,14 +30,14 @@ nav_rag = NavigationRAG("app/navigation.json")
 
 def get_chat_response(user_message: str, chat_history=None) -> str:
     try:
-        # Step 1: Try Navigation RAG
+        # Step 1: Try Navigation
         nav_results = nav_rag.retrieve_navigation_info(user_message, top_k=1)
         nav_match = nav_results[0] if nav_results else None
 
         # Step 2: Try Company Context RAG
         company_context = company_rag.retrieve_relevant_chunks(user_message)
 
-        # Step 3: Use company context if found
+        # If no nav match but company context found → go with company RAG
         if company_context.strip():
             messages = [{"role": "system", "content": f"{system_instructions}\n\n{company_context}"}]
 
@@ -53,13 +54,16 @@ def get_chat_response(user_message: str, chat_history=None) -> str:
                 messages=messages,
                 temperature=0.5,
             )
-            return response.choices[0].message["content"].strip()
+            raw_response = response.choices[0].message["content"].strip()
+            if raw_response.lower().startswith("response"):
+                raw_response = raw_response[7:].strip()
+            return raw_response
 
-        # Step 4: Use navigation if no company context match
+        # If nav match found but no company context
         if nav_match:
-            return f"{nav_match['description']} You can find it on the '{nav_match['name']}' page."
+            return f"{nav_match['description']} 👉 [Go to {nav_match['name']} Page]({nav_match['path']})"
 
-        # Step 5: Final fallback
+        # Final fallback — no RAG or nav matched
         return "Hey! I'm Aarvasa's assistant. Let me know how I can help with your property queries. 😊"
 
     except Exception as e:
