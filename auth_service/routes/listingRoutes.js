@@ -17,6 +17,7 @@ router.get("/", async (req, res) => {
       search,
     } = req.query;
 
+
     const key = crypto
       .createHash("md5")
       .update(JSON.stringify(req.query))
@@ -59,6 +60,15 @@ router.get("/", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+
+// property details listing route
+
+router.get("/:id", async(req, res) => {
+  const { id } = req.params
+  const data = await Listing.find({_id : id})
+  res.json({status : true, data});
+})
 
 // 🔧 This line is essential
 module.exports = router;

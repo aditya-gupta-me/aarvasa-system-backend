@@ -5,6 +5,7 @@ const passport = require("passport");
 const connectDB = require("./config/db");
 const helmet = require("helmet");
 const cors = require("cors");
+const Property = require("./models/Listing");
 
 dotenv.config();
 connectDB();
@@ -37,7 +38,10 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-
+// app.get("/", async(req, res) => {
+//   await Property.deleteMany({ imageUrls: { $size: 0 }, thumbnailImages: { $size: 1 } });
+//   return res.send("deleted");
+// })
 // ✅ Define your routes
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/user", require("./routes/userRoutes"));
