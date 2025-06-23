@@ -5,7 +5,6 @@ const passport = require("passport");
 const connectDB = require("./config/db");
 const helmet = require("helmet");
 const cors = require("cors");
-const Property = require("./models/Listing");
 
 dotenv.config();
 connectDB();
@@ -15,16 +14,16 @@ require("./config/passport");
 const app = express();
 app.use(helmet());
 
-// ✅ Setup CORS first (before any route/middleware that uses cookies or headers)
+// CORS 
 app.use(cors({
-  origin: process.env.FRONTEND_URL, // e.g., "https://aarvasa-nine.vercel.app"
+  origin: process.env.FRONTEND_URL, 
   credentials: true
 }));
 
-// ✅ Accept JSON payloads
+// Accept JSON payloads
 app.use(express.json());
 
-// ✅ Session middleware (used by passport)
+// Session middleware (used by passport)
 app.use(session({
   secret: "otpsecret",
   resave: false,
@@ -38,13 +37,8 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-// app.get("/", async(req, res) => {
-//   await Property.deleteMany({ imageUrls: { $size: 0 }, thumbnailImages: { $size: 1 } });
-//   return res.send("deleted");
-// })
-// ✅ Define your routes
+
 app.use("/api/auth", require("./routes/authRoutes"));
-app.use("/api/user", require("./routes/userRoutes"));
 app.use("/api/chatbot", require("./routes/chatbot"));
 app.use('/api/listings', require("./routes/listingRoutes"));
 
