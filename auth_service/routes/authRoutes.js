@@ -16,7 +16,7 @@ router.post('/refresh-token',refreshToken);
 // Google OAuth
 router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 router.get("/google/callback",
-  passport.authenticate("google", { session: false, failureRedirect: process.env.FRONTEND_URL + "/signin" }),
+  passport.authenticate("google", { session: false, failureRedirect: process.env.FRONTEND_URL + "/signup" }),
   async (req, res) => {
     try {
       const user = req.user;
