@@ -68,13 +68,17 @@ exports.getListings = async (req, res) => {
 exports.getListingById = async (req, res) => {
   try {
     const { id } = req.params;
-
+    const cached = await redisClient.get(id);
+    if (cached) {
+      console.log("details from redis");
+      return res.json({ status: true, data: JSON.parse(cached), msg : "redis" });
+    }
     const listing = await Listing.findById(id);
     if (!listing) {
       return res.status(404).json({ message: "Listing not found" });
     }
-
-    res.json({ status: true, data: listing });
+    redisClient.setEx(id, 300, JSON.stringify(listing));
+    return res.json({ status: true, data: listing });
   } catch (error) {
     console.error("❌ Error fetching listing by ID:", error.message);
     res.status(500).json({ message: "Server error" });
