@@ -184,3 +184,39 @@ exports.refreshToken = async (req, res) => {
     res.status(403).json({ message: "Token expired or invalid" });
   }
 };
+
+exports.googleAuthCallback = async (req, res) => {
+  try {
+    const user = req.user;
+
+    const accessToken = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "15m" }
+    );
+
+    const refreshToken = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    // Save refresh token
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    // Redirect with tokens (you can also set cookies instead)
+    res.redirect(`${process.env.FRONTEND_URL}/signin?accessToken=${accessToken}&refreshToken=${refreshToken}`);
+    
+    // To use cookies instead, comment above and uncomment below:
+    /*
+    res.cookie("accessToken", accessToken, { httpOnly: true, sameSite: 'Lax', secure: true });
+    res.cookie("refreshToken", refreshToken, { httpOnly: true, sameSite: 'Lax', secure: true });
+    res.redirect(`${process.env.FRONTEND_URL}/signin`);
+    */
+  } catch (err) {
+    console.error("Google auth error:", err);
+    res.redirect(`${process.env.FRONTEND_URL}/signin?error=google_auth_failed`);
+  }
+};
+
