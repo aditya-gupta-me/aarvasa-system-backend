@@ -88,7 +88,6 @@ exports.login = async (req, res) => {
   user.refreshToken = refreshToken;
   await user.save();
 
-  res.json({ accessToken, refreshToken });
 };
 
 const otpStore = new Map();
