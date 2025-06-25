@@ -68,11 +68,11 @@ exports.verifyOtp = async (req, res) => {
   });
 };
 
-
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
+
   if (!user || !(await bcrypt.compare(password, user.password))) {
     return res.status(401).json({ message: "Invalid credentials" });
   }
@@ -80,6 +80,7 @@ exports.login = async (req, res) => {
   const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
     expiresIn: "15m",
   });
+
   const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
     expiresIn: "24h",
   });
@@ -88,7 +89,14 @@ exports.login = async (req, res) => {
   user.refreshToken = refreshToken;
   await user.save();
 
+  // ✅ Send response here
+  res.status(200).json({
+    username: user.username || "", // or user.name or whatever you store
+    accessToken,
+    refreshToken,
+  });
 };
+
 
 const otpStore = new Map();
 
