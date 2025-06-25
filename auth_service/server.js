@@ -12,6 +12,8 @@ connectDB();
 require("./config/passport");
 
 const app = express();
+app.set('trust proxy', true);
+
 app.use(helmet());
 
 // CORS 
