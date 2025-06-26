@@ -9,6 +9,7 @@ exports.getListings = async (req, res) => {
       city,
       propertyType,
       budget,
+      transactionType
     } = req.query;
 
     // Create a unique Redis key based on query
@@ -29,7 +30,7 @@ exports.getListings = async (req, res) => {
     let query = {};
 
     if (city) {
-      query.city = { $regex: city, $options: "i" };
+      query.propertyTitle = { $regex: city, $options: "i" };
     }
 
     if (propertyType) {
@@ -40,6 +41,10 @@ exports.getListings = async (req, res) => {
     if (budget) {
       query.price = { $lte: parseInt(budget) };
     }
+    if(transactionType){
+      query.transactionType = transactionType
+    }
+  
 
     // Fetch from DB
     const listings = await Listing.find(query).sort({ createdAt: -1 });
