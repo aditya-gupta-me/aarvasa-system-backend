@@ -7,13 +7,8 @@ exports.getListings = async (req, res) => {
   try {
     const {
       city,
-      type,
-      minPrice,
-      maxPrice,
-      bedrooms,
-      bathrooms,
-      listingType,
-      search,
+      propertyType,
+      budget,
     } = req.query;
 
     // Create a unique Redis key based on query
@@ -30,24 +25,20 @@ exports.getListings = async (req, res) => {
     }
 
     // Build MongoDB query
+
     let query = {};
-    if (city) query.city = { $regex: city, $options: "i" };
-    if (type) query.propertyType = type;
-    if (bedrooms) query.bedrooms = bedrooms;
-    if (bathrooms) query.bathrooms = bathrooms;
-    if (listingType) query.transactionType = listingType;
-    if (search) {
-      query.$or = [
-        { city: { $regex: search, $options: "i" } },
-        { location: { $regex: search, $options: "i" } },
-        { propertyTitle: { $regex: search, $options: "i" } },
-      ];
+
+    if (city) {
+      query.city = { $regex: city, $options: "i" };
     }
 
-    if (minPrice || maxPrice) {
-      query.price = {};
-      if (minPrice) query.price.$gte = parseInt(minPrice);
-      if (maxPrice) query.price.$lte = parseInt(maxPrice);
+    if (propertyType) {
+      query.propertyType = propertyType;
+    }
+
+    // If budget is provided, filter listings with price <= budget
+    if (budget) {
+      query.price = { $lte: parseInt(budget) };
     }
 
     // Fetch from DB
@@ -71,7 +62,7 @@ exports.getListingById = async (req, res) => {
     const cached = await redisClient.get(id);
     if (cached) {
       console.log("details from redis");
-      return res.json({ status: true, data: JSON.parse(cached), msg : "redis" });
+      return res.json({ status: true, data: JSON.parse(cached), msg: "redis" });
     }
     const listing = await Listing.findById(id);
     if (!listing) {
