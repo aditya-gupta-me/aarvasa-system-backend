@@ -44,6 +44,7 @@ app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/chatbot", require("./routes/chatbot"));
 app.use('/api/listings', require("./routes/listingRoutes"));
 app.use('/api/subscribe', require('./routes/newsletterRoutes'));
+app.use("/api/contact", require("./routes/contactRoutes"));
 
 
 const PORT = process.env.PORT || 5000;
