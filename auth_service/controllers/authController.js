@@ -228,3 +228,16 @@ exports.googleAuthCallback = async (req, res) => {
   }
 };
 
+exports.getCurrentUser = (req, res) => {
+  const user = req.user;
+  res.json({
+    email: user.email,
+    name: user.name,
+    picture: user.picture,
+    givenName: user.givenName,
+    familyName: user.familyName,
+    locale: user.locale,
+    googleId: user.googleId,
+    isVerified: user.isVerified
+  });
+};
