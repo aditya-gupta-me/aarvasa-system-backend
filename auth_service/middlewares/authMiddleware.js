@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
-const verifyToken = (req, res, next) => {
+const verifyToken = async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
-  // Expecting: Authorization: Bearer <accessToken>
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ message: 'Access denied: No token provided' });
   }
@@ -12,9 +12,15 @@ const verifyToken = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // Optional: attach user ID to request
+
+    // Fetch the full user document
+    const user = await User.findById(decoded.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    req.user = user; // Attach the user document to request
     next();
   } catch (err) {
+    console.error('Token verification failed:', err.message);
     return res.status(403).json({ message: 'Invalid or expired token' });
   }
 };

@@ -9,8 +9,10 @@ const {
   setPassword,
   refreshToken,
   googleAuthCallback,
+  getCurrentUser
 } = require("../controllers/authController");
 const authLimiter = require("../middlewares/rateLimiter");
+const verifyToken = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
@@ -36,5 +38,15 @@ router.get(
   }),
   googleAuthCallback
 );
+
+router.get('/me', verifyToken, (req, res) => {
+  res.json({
+    name: req.user.name,
+    email: req.user.email,
+    picture: req.user.picture,
+    googleId: req.user.googleId,
+    locale: req.user.locale
+  });
+});
 
 module.exports = router;
