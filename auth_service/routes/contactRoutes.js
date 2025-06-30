@@ -4,6 +4,10 @@ const router = express.Router();
 const Contact = require("../models/Contact");
 const sendMail = require("../utils/sendMail");
 
+router.get("/", (req, res) => {
+  res.send("Hii");
+})
+
 router.post("/", async (req, res) => {
   const { name, email, date } = req.body;
 
