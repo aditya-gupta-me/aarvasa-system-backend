@@ -92,6 +92,8 @@ exports.login = async (req, res) => {
   // ✅ Send response here
   res.status(200).json({
     username: user.username || "", // or user.name or whatever you store
+    is_subscribed : user.is_subscribed,
+    plan : user.subscription_type,
     accessToken,
     refreshToken,
   });

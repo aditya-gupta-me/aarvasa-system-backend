@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Razorpay = require("razorpay");
+const User = require("../models/User");
+const { markUser } = require("../controllers/PaymentController")
 router.post("/create-order", async (req, res) => {
     const { amount } = req.body;
 
@@ -23,6 +25,32 @@ router.post("/create-order", async (req, res) => {
     } catch (err) {
         res.status(500).send("Error creating order");
     }
+});
+
+router.post("/markUser", async (req, res) => {
+    const { email, payment_id, subscription_type,  subscription_date } = req.body;
+    if(!email){
+        return res.json({msg : "email not found", status : false});
+    }
+   try{
+     const update = await User.updateOne(
+        { email: email },
+        {
+            $set: {
+                payment_id : payment_id,
+                status: true,
+                is_subscribed : true,
+                subscription_type: subscription_type,
+                subscription_date: new Date()
+            }
+        }
+    )
+    res.json({status : true, msg : "User subscribed"})
+   }
+   catch(error){
+    console.log(error);
+   }
+
 });
 
 
