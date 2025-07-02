@@ -1,42 +1,131 @@
 Aarvasa Innovations Pvt. Ltd.
 
-What Aarvasa Does
-Real Estate PropTech Platform (Inc. April 2025)
-Aarvasa Innovations Pvt. Ltd. is a newly incorporated real estate technology startup
-based in Bhopal (incorporated April 21, 2025).
+Aarvasa Innovations Pvt. Ltd. is an Indian real estate technology startup (proptech) headquartered in Bhopal, officially incorporated on April 21, 2025. Aarvasa aims to redefine the property industry by integrating AI, IoT, blockchain, and sustainable building solutions into every stage of property development, buying, renting, and management.
 
-Core Services
-• AR/VR Property Tours – Immersive virtual walkthroughs of listings, enhancing
-the buying/selling experience.
-• AI-driven Personalization – Tailored property recommendations based on user
-preferences and behavior.
-• Blockchain-secured Transactions – Leveraging blockchain to ensure
-transparency and security in real estate deals.
-Audience & Value Proposition
+We empower homeowners, property developers, real estate investors, and commercial builders to create smart, secure, eco-friendly, and digitally enhanced infrastructures.
 
-Aarvasa caters to a wide range of clients:
-• First-time homebuyers who benefit from flexible payment models.
-• Seasoned investors seeking higher ROI through tech-driven solutions.
-• Property owners requiring advisory services for monetizing or leasing assets.
+Vision
+To shape the future of living spaces—making them intelligent, green, and connected through technology.
 
-Mission & Vision
-Founded by Uday Prakash Sahu (driven by a journey from student challenges to
-entrepreneurship) and Ansh Dubey, Aarvasa aims to democratize and modernize real
-estate with:
-• Subscription-based listings & premium features
-• Commission on successful transactions (1–3%)
-• Rental and turnkey property management services
-• Ad monetization and advisory offerings
+Mission
+Transform traditional real estate with smart solutions and digital transformation.
 
-Early Traction
-• Bootstrapped ₹15 lakh in revenue, facilitating ₹2.5 crore worth of offline property
-deals within the first three months of operation.
-• Recognized as runner-up at EO GSEA Summit in Bhopal.
+Embed environmental sustainability and low-carbon practices in real estate.
 
-Summary
-Aarvasa is a tech-enabled real estate platform that merges immersive viewing
-(AR/VR), smart insights (AI), and secure transactions (Blockchain). Based in Bhopal, it
-supports both new and experienced buyers with flexible financial options, advisory
-services, and cutting-edge property tech innovation.
-If you’d like, I can further detail Aarvasa’s revenue model, target markets, competitors,
-or investor outlook. Just let me know!
+Deliver actionable real estate analytics, data intelligence, and market insights.
+
+Streamline property transactions, leasing, and maintenance using AI, IoT, and blockchain.
+
+Core Offerings
+Smart Living Infrastructure
+
+IoT-based monitoring of electricity, water usage, and smart lighting.
+
+Automation for HVAC, energy efficiency, and utility control.
+
+Smart home/office features like voice assistants, connected devices, and remote control systems.
+
+Green & Sustainable Real Estate Design
+
+Properties with solar energy, renewable systems, and green architecture.
+
+Use of rainwater harvesting, green roofs, and low-emission materials.
+
+Support for LEED certifications and eco-friendly construction.
+
+Digital Property Management
+
+AI-powered dashboards for landlords, tenants, and property managers.
+
+Tools for predictive maintenance, task scheduling, and tenant lifecycle management.
+
+Digital tools for e-signatures, smart lease generation, and onboarding.
+
+AI-Powered Real Estate Concierge
+
+Personalized property suggestions using machine learning.
+
+Automation of loan processing, KYC, and documentation.
+
+AR/VR tools for virtual interior design and furniture visualization.
+
+Blockchain & Smart Contracts
+
+Tamper-proof, verifiable real estate transactions via smart contracts.
+
+Legal automation for property sales, leases, and ownership transfers.
+
+AR/VR Property Tours
+
+Immersive 3D walkthroughs for remote buyers, virtual renters, and investors.
+
+Helps improve site visualization, buyer decision-making, and project showcasing.
+
+Subscription & Monetization Models
+
+Monthly/yearly plans for listing premium properties.
+
+1–3% commission on closed transactions.
+
+Revenue from real estate advisory services, advertising, and analytics tools.
+
+Technologies Used
+Artificial Intelligence (AI) & Machine Learning (ML)
+
+Internet of Things (IoT)
+
+Blockchain
+
+Augmented Reality (AR) / Virtual Reality (VR)
+
+Cloud Computing & SaaS Platforms
+
+Target Users & Segments
+Homebuyers and families seeking smart homes.
+
+First-time buyers who need affordable and flexible plans.
+
+Builders and property developers aiming for digitization.
+
+Real estate investors looking for high ROI through tech-enabled solutions.
+
+Corporates seeking smart office infrastructure and facility automation.
+
+Owners needing rental monetization and asset advisory.
+
+Why Choose Aarvasa
+Holistic mix of technology, sustainability, and user-focused design.
+
+Innovation-led R&D for future-forward housing models.
+
+Seamless automation and real-time analytics across the property lifecycle.
+
+Achievements & Recognition
+₹15 lakh self-funded revenue in the first 90 days.
+
+₹2.5 crore+ worth offline property deals closed.
+
+Selected for VITTBI Pre-incubation Program.
+
+Winner – Microsoft for Startups India.
+
+Official Sponsor – Yantra, VIT Vellore’s tech fest.
+
+Runner-up – EO GSEA Summit, Bhopal.
+
+Total listed property portfolio exceeds ₹50 crore+.
+
+Roadmap & Future Plans
+Launch a pan-India smart property platform.
+
+Collaborate with government smart city missions.
+
+Expand into co-living, retail tech, and urban sustainability zones.
+Founder:Uday Prakash Sahu
+Co founded by Ansh Dubey
+Contact
+Aarvasa Innovations Pvt. Ltd.
+📍 Bhopal, India
+📧 Email: info@aarvasa.com
+🌐 Website: [Insert URL]
+🔗 Social: LinkedIn | Twitter | Instagram
