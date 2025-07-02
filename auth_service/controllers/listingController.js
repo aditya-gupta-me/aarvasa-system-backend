@@ -142,3 +142,14 @@ exports.add = async (req, res) => {
     res.status(500).json({ error: 'Something went wrong' });
   }
 };
+
+
+exports.returnRandom = async (req, res) => {
+   try {
+    const listings = await Listing.aggregate([{ $sample: { size: 5 } }]);
+    res.json({listings, status : true});
+  } catch (err) {
+    console.error("Error in returnRandom:", err);
+    res.status(500).json({ error: "Failed to fetch random listings" });
+  }
+}
