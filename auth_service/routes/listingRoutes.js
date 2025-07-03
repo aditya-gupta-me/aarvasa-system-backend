@@ -1,14 +1,20 @@
 const express = require("express");
 const router = express.Router();
-const { getListings, getListingById, add, returnRandom } = require("../controllers/listingController");
+const { 
+  getListings, 
+  getListingById, 
+  add, 
+  returnRandom 
+} = require("../controllers/listingController");
 
-// GET /api/listings
+// Define specific routes first
+router.get("/add", add);
+router.get("/random", returnRandom);
+
+// General listing
 router.get("/", getListings);
 
-// GET /api/listings/:id
-router.get("/add", add)
-router.get("/random", returnRandom);
+// This should be last to prevent conflicts
 router.get("/:id", getListingById);
-
 
 module.exports = router;
