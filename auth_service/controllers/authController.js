@@ -89,7 +89,7 @@ exports.login = async (req, res) => {
   }
 
   const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: "15m",
+    expiresIn: "24h",
   });
 
   const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
@@ -213,7 +213,7 @@ exports.googleAuthCallback = async (req, res) => {
     const accessToken = jwt.sign(
       { id: user._id },
       process.env.JWT_SECRET,
-      { expiresIn: "1m" }
+      { expiresIn: "24" }
     );
 
     const refreshToken = jwt.sign(
