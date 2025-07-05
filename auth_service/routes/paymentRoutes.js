@@ -29,7 +29,7 @@ router.post("/create-order", async (req, res) => {
 
 router.post("/markUser", async (req, res) => {
     const { email, payment_id, subscription_type,  subscription_date } = req.body;
-    if(!email){
+        if(!email){
         return res.json({msg : "email not found", status : false});
     }
    try{
