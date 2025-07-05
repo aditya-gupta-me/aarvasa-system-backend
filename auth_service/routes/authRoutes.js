@@ -1,5 +1,6 @@
 const express = require("express");
 const passport = require("passport");
+const User = require("../models/User");
 const {
   signup,
   verifyOtp,
@@ -39,14 +40,11 @@ router.get(
   googleAuthCallback
 );
 
-router.get('/me', verifyToken, (req, res) => {
-  res.json({
-    name: req.user.name,
-    email: req.user.email,
-    picture: req.user.picture,
-    googleId: req.user.googleId,
-    locale: req.user.locale
-  });
+
+
+router.get('/profile', verifyToken, async (req, res) => {
+  const user = await User.findById(req.user.id);
+ res.json({status : true, user});
 });
 
 module.exports = router;

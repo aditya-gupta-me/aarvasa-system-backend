@@ -8,6 +8,8 @@ const verifyToken = async (req, res, next) => {
     return res.status(401).json({ message: 'Access denied: No token provided' });
   }
 
+  console.log(authHeader);
+
   const token = authHeader.split(' ')[1];
 
   try {
@@ -15,13 +17,13 @@ const verifyToken = async (req, res, next) => {
 
     // Fetch the full user document
     const user = await User.findById(decoded.id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!user) return res.json({ message: 'User not found' });
 
     req.user = user; // Attach the user document to request
     next();
   } catch (err) {
     console.error('Token verification failed:', err.message);
-    return res.status(403).json({ message: 'Invalid or expired token' });
+    return res.json({status : false, message: 'Invalid or expired token' });
   }
 };
 

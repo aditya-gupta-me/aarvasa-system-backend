@@ -68,6 +68,17 @@ exports.verifyOtp = async (req, res) => {
   });
 };
 
+// exports.insert = async (req, res) => {
+//   const json = {
+//     email : "aarvasa_test@gmail.com",
+//     password : "aarvasa_test_123",
+//   }
+//   json.password = await bcrypt.hash(json.password, 10);
+//   const user = await new User(json);
+//   await user.save();
+
+// }
+
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -78,7 +89,7 @@ exports.login = async (req, res) => {
   }
 
   const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: "15m",
+    expiresIn: "1m",
   });
 
   const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
@@ -202,7 +213,7 @@ exports.googleAuthCallback = async (req, res) => {
     const accessToken = jwt.sign(
       { id: user._id },
       process.env.JWT_SECRET,
-      { expiresIn: "15m" }
+      { expiresIn: "1m" }
     );
 
     const refreshToken = jwt.sign(

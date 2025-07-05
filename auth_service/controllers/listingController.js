@@ -1,6 +1,8 @@
 const Listing = require("../models/Listing");
 const redisClient = require("../config/redisClient");
 const crypto = require("crypto");
+const axios = require("axios");
+const Property = require("../models/Listing");
 
 // Get all listings (with filters and Redis caching)
 exports.getListings = async (req, res) => {
@@ -85,9 +87,9 @@ exports.add = async (req, res) => {
 
 
   try {
-    const response = await axios.get('https://www.magicbricks.com/mbsrp/propertySearch.html?editSearch=Y&category=S&bedrooms=11701,11702&city=5196,5001,5003,5027&page=2&groupstart=30&offset=0&maxOffset=503&sortBy=premiumRecent&postedSince=-1&pType=10002,10003,10021,10022,10001,10017&isNRI=N&multiLang=en&propertyType=10017');
+    const response = await axios.get('https://www.magicbricks.com/mbsrp/propertySearch.html?editSearch=Y&category=S&bedrooms=11701,11702&city=5196&page=2&groupstart=30&offset=0&maxOffset=503&sortBy=premiumRecent&postedSince=-1&pType=10002,10003,10021,10022,10001,10017&isNRI=N&multiLang=en &propertyType=10017&keywords=premium,luxury');
 
-    const data = response.data.listOfProperties || [];
+    const data = response.data.resultList || [];
 
     const propertiesToSave = data.map(item => ({
       propertyTitle: item.propertyTitle,
