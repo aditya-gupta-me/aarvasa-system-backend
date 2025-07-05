@@ -28,7 +28,7 @@ exports.signup = async (req, res) => {
     });
   } catch (err) {
     console.error("Signup Error:", err.message);
-    return res.status(500).json({
+    return res.json({
       success: false,
       message: "Failed to send OTP",
     });
