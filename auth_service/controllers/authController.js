@@ -49,7 +49,7 @@ exports.verifyOtp = async (req, res) => {
 
   // Generate Tokens
   const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: "15m",
+    expiresIn: "24h",
   });
 
   const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
