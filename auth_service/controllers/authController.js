@@ -9,7 +9,7 @@ exports.signup = async (req, res) => {
 
   const existing = await User.findOne({ email });
   if (existing) {
-    return res.status(400).json({ success: false, msg: "Email already in use" });
+    return res.json({ success: false, msg: "Email already in use" });
   }
 
   try {
@@ -40,7 +40,7 @@ exports.verifyOtp = async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user || user.otp !== otp || user.otpExpiry < Date.now()) {
-    return res.status(400).json({ msg: "Invalid or expired OTP" });
+    return res.json({ msg: "Invalid or expired OTP" });
   }
 
   // Clear OTP
