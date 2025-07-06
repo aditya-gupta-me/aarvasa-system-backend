@@ -9,6 +9,9 @@ services:
       - "5000:5000"
     env_file:
       - ./auth_service/.env
+    volumes:
+      - ./auth_service:/app        # Live code syncing
+      - /app/node_modules          # Prevents conflict with local node_modules
     networks:
       - aarvasa-net
 
