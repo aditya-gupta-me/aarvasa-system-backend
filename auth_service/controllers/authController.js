@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const generateOtp = require("../utils/generateOtp");
-
 exports.signup = async (req, res) => {
   const { email, password } = req.body;
 
