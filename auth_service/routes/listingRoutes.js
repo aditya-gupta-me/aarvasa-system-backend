@@ -35,7 +35,7 @@ router.post("/by-ids", getListingsByIds);
 router.post("/postrecent", verifyToken, addToRecentlyViewed);
 router.get("/recent", verifyToken, getRecentlyViewed);
 
-router.get("/:id", verifyToken, getListingById);
+router.get("/:id", getListingById);
 
 
 
