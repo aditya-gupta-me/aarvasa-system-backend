@@ -2,6 +2,8 @@ const Listing = require("../models/Listing");
 const redisClient = require("../config/redisClient");
 const crypto = require("crypto");
 const axios = require("axios");
+const FavModel = require("../models/Fav");
+const RecentViewed = require("../models/RecentlyViewed");
 
 // 📦 GET All Listings (with Redis + Filters)
 exports.getListings = async (req, res) => {
@@ -48,7 +50,6 @@ exports.getListings = async (req, res) => {
 exports.getListingById = async (req, res) => {
   try {
     const { id } = req.params;
-
     const cached = await redisClient.get(id);
     if (cached) {
       console.log("📦 Detail returned from Redis");
@@ -148,6 +149,18 @@ exports.add = async (req, res) => {
   }
 };
 
+// POST /api/listings/by-ids
+exports.getListingsByIds = async (req, res) => {
+    try {
+        const { ids } = req.body;
+        const properties = await Listing.find({ _id: { $in: ids } });
+        res.status(200).json(properties);
+    } catch (err) {
+        console.error("Error in getListingsByIds:", err);
+        res.status(500).json({ msg: "Internal server error" });
+    }
+};
+
 exports.createListing = async (req, res) => {
   try {
     const body = req.body;
@@ -221,5 +234,123 @@ exports.createListing = async (req, res) => {
     return res
       .status(500)
       .json({ success: false, message: "Failed to create listing" });
+  }
+};
+
+
+// added favourites
+
+exports.favourites = async (req, res) => {
+  try {
+    const prop_id = req.body.propertyId;
+    const user_id = req.user._id;
+
+    let favDoc = await FavModel.findOne({ user_id });
+
+    if (!favDoc) {
+      // If no document, create new one
+      const newFav = new FavModel({
+        user_id: user_id,
+        property_ids: [prop_id]
+      });
+
+      await newFav.save();
+      return res.status(201).json({ success: true, msg: "Favourite added (new doc)", data: newFav });
+    }
+
+    // If document exists, check if already liked
+    if (!favDoc.property_ids.includes(prop_id)) {
+      favDoc.property_ids.push(prop_id);
+      await favDoc.save();
+      return res.status(200).json({ success: true, msg: "Favourite added", data: favDoc });
+    } else {
+      await FavModel.updateOne(
+        { user_id: req.user._id },
+        { $pull: { property_ids: prop_id } }
+      );
+      return res.status(200).json({success : true, msg: "Removed from like" });
+    }
+
+  } catch (err) {
+    console.error("Error in favourites:", err);
+    return res.status(500).json({ msg: "Internal server error" });
+  }
+};
+
+
+// fetching favourites
+
+exports.getFavourites = async (req, res) => {
+  try {
+    const user_id = req.user._id;
+    const favDoc = await FavModel.findOne({ user_id });
+
+    res.status(200).json({
+      property_ids: favDoc?.property_ids || []
+    });
+  } catch (err) {
+    console.error("Error getting favourites:", err);
+    res.status(500).json({ msg: "Internal server error" });
+  }
+};
+
+
+
+
+// added recently viewed 
+
+// ✅ Final version: uses upsert to avoid VersionError
+exports.addToRecentlyViewed = async (req, res) => {
+  try {
+    const user_id = req.user._id;
+    const { propertyId } = req.body;
+
+    await RecentViewed.findOneAndUpdate(
+      { user_id },
+      { $addToSet: { property_ids: propertyId } }, // ensures uniqueness
+      { upsert: true, new: true } // create if doesn't exist
+    );
+
+    return res.status(200).json({
+      status: true,
+      message: "Added to recently viewed",
+    });
+  } catch (err) {
+    console.error("Error in recently viewed:", err);
+    return res.status(500).json({
+      status: false,
+      message: "Server error",
+    });
+  }
+};
+
+
+exports.getRecentlyViewed = async (req, res) => {
+  const user_id = req.user._id;
+
+  try {
+    const recent = await RecentViewed.findOne({ user_id })
+      .populate("property_ids") // Automatically gets full property documents
+      .lean(); // Optional: returns plain JS objects instead of Mongoose documents
+
+    if (!recent || !recent.property_ids || recent.property_ids.length === 0) {
+      return res.status(200).json({
+        status: true,
+        data: [],
+        msg: "No recently viewed properties",
+      });
+    }
+
+    return res.status(200).json({
+      status: true,
+      data: recent.property_ids, // Full property objects
+    });
+
+  } catch (err) {
+    console.error("❌ Error fetching recently viewed:", err.message);
+    return res.status(500).json({
+      status: false,
+      msg: "Internal server error",
+    });
   }
 };

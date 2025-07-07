@@ -6,11 +6,14 @@ const favSchema = new mongoose.Schema({
         ref: "User",
         required: true
     },
-    propery_id: [
+    property_ids: [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Listings",
+            type: String,
             required: true
         }
     ]
-})
+},{ timestamps: true})
+
+const favModel = mongoose.model("Favourite", favSchema);
+
+module.exports = favModel;
