@@ -48,6 +48,7 @@ app.use('/api/subscribe', require('./routes/newsletterRoutes'));
 app.use("/api/contact", require("./routes/contactRoutes"));
 app.use("/api/contact", require("./routes/contactRoutes"));
 app.use("/api/payment", require("./routes/paymentRoutes.js"));
+app.use("/api/user", require("./routes/userRoute.js"));
 
 app.get("/", (req, res) => {
   res.send("ok");

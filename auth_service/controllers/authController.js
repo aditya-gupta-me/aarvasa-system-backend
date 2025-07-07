@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const generateOtp = require("../utils/generateOtp");
-
 exports.signup = async (req, res) => {
   const { email, password } = req.body;
 
@@ -81,12 +80,22 @@ exports.verifyOtp = async (req, res) => {
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-
   const user = await User.findOne({ email });
 
-  if (!user || !(await bcrypt.compare(password, user.password))) {
-    return res.status(401).json({ message: "Invalid credentials" });
+  if (!user) {
+    return res.status(401).json({ message: "Invalid email entered" });
   }
+
+  if (!user.password) {
+    return res.status(401).json({ message: "This account was registered via Google. Please sign in with Google." });
+  }
+ 
+
+   const decode = await bcrypt.compare(password, user.password);
+    if (!decode) {
+      return res.status(401).json({ message: "Invalid email entered" });
+    }
+
 
   const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
     expiresIn: "24h",
@@ -103,8 +112,8 @@ exports.login = async (req, res) => {
   // ✅ Send response here
   res.status(200).json({
     username: user.username || "", // or user.name or whatever you store
-    is_subscribed : user.is_subscribed,
-    plan : user.subscription_type,
+    is_subscribed: user.is_subscribed,
+    plan: user.subscription_type,
     accessToken,
     refreshToken,
   });
@@ -228,7 +237,7 @@ exports.googleAuthCallback = async (req, res) => {
 
     // Redirect with tokens (you can also set cookies instead)
     res.redirect(`${process.env.FRONTEND_URL}/signin?accessToken=${accessToken}&refreshToken=${refreshToken}`);
-    
+
     // To use cookies instead, comment above and uncomment below:
     /*
     res.cookie("accessToken", accessToken, { httpOnly: true, sameSite: 'Lax', secure: true });
