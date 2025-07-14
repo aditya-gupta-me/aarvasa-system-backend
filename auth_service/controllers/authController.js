@@ -8,7 +8,7 @@ exports.signup = async (req, res) => {
 
   const existing = await User.findOne({ email });
   if (existing) {
-    return res.json({ success: false, msg: "Email already in use" });
+    return res.json({ success: false, msg: "An account already exists with this email" });
   }
 
   try {
@@ -27,7 +27,7 @@ exports.signup = async (req, res) => {
     });
   } catch (err) {
     console.error("Signup Error:", err.message);
-    return res.json({
+    return res.status(500).json({
       success: false,
       message: "Failed to send OTP",
     });
@@ -39,12 +39,12 @@ exports.verifyOtp = async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user || user.otp !== otp || user.otpExpiry < Date.now()) {
-    return res.json({ msg: "Invalid or expired OTP" });
+    return res.status(401).json({ msg: "Invalid or expired OTP" });
   }
 
   // Clear OTP
-  user.otp = null;
-  user.otpExpiry = null;
+ user.otp = ""
+ user.otpExpiry = ""
 
   // Generate Tokens
   const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {

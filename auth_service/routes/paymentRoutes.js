@@ -3,7 +3,6 @@ const router = express.Router();
 const Razorpay = require("razorpay");
 const User = require("../models/User");
 const verifyToken = require("../middlewares/authMiddleware");
-const { markUser } = require("../controllers/PaymentController")
 router.post("/create-order", verifyToken, async (req, res) => {
     const { amount } = req.body;
 

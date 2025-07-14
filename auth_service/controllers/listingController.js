@@ -8,38 +8,51 @@ const RecentViewed = require("../models/RecentlyViewed");
 // 📦 GET All Listings (with Redis + Filters)
 exports.getListings = async (req, res) => {
   try {
-    const { city, propertyType, budget, transactionType } = req.query;
+    const { page = 1, limit = 10, ...filters } = req.query;
 
     // Redis key based on filters
-    const key = crypto
-      .createHash("md5")
-      .update(JSON.stringify(req.query))
-      .digest("hex");
+    // const key = crypto
+    //   .createHash("md5")
+    //   .update(JSON.stringify(req.query))
+    //   .digest("hex");
 
-    const cachedData = await redisClient.get(key);
-    if (cachedData) {
-      console.log("🔁 Listings returned from Redis");
-      return res.status(200).json(JSON.parse(cachedData));
-    }
+    // const cachedData = await redisClient.get(key);
+    // if (cachedData) {
+    //   console.log("🔁 Listings returned from Redis");
+    //   return res.status(200).json(JSON.parse(cachedData));
+    // }
 
     // Mongo query
     const query = {};
 
-    if (city) {
-      query.propertyTitle = { $regex: city, $options: "i" };
+    if (filters.city) {
+      query.propertyTitle = { $regex: filters.city, $options: "i" };
+    }
+    if (filters.propertyType && filters.propertyType !== "All") {
+      query.propertyType = filters.propertyType;
+    }
+    if (filters.transactionType && filters.transactionType !== "All") {
+      query.transactionType = filters.transactionType;
+    }
+    if (filters.budget) {
+      query.price = { $lte: parseInt(filters.budget) };
     }
 
-    if (propertyType) query.propertyType = propertyType;
-    if (transactionType) query.transactionType = transactionType;
-    if (budget) query.price = { $lte: parseInt(budget) };
+    const listings = await Listing.find(query).skip((page - 1) * limit)
+      .limit(Number(limit));
 
-    const listings = await Listing.find(query).sort({ createdAt: -1 });
+    const total = await Listing.countDocuments(query);
 
     // Cache it for 5 minutes
-    await redisClient.setEx(key, 300, JSON.stringify(listings));
+    // await redisClient.setEx(key, 300, JSON.stringify(listings));
 
-    console.log("✅ Listings fetched from Mongo and cached");
-    return res.status(200).json(listings);
+    // console.log("✅ Listings fetched from Mongo and cached");
+    res.status(200).json({
+      total,
+      currentPage: Number(page),
+      totalPages: Math.ceil(total / limit),
+      listings,
+    });
   } catch (err) {
     console.error("❌ Error in getListings:", err.message);
     res.status(500).json({ message: "Server error" });
@@ -151,14 +164,14 @@ exports.add = async (req, res) => {
 
 // POST /api/listings/by-ids
 exports.getListingsByIds = async (req, res) => {
-    try {
-        const { ids } = req.body;
-        const properties = await Listing.find({ _id: { $in: ids } });
-        res.status(200).json(properties);
-    } catch (err) {
-        console.error("Error in getListingsByIds:", err);
-        res.status(500).json({ msg: "Internal server error" });
-    }
+  try {
+    const { ids } = req.body;
+    const properties = await Listing.find({ _id: { $in: ids } });
+    res.status(200).json(properties);
+  } catch (err) {
+    console.error("Error in getListingsByIds:", err);
+    res.status(500).json({ msg: "Internal server error" });
+  }
 };
 
 exports.createListing = async (req, res) => {
@@ -268,7 +281,7 @@ exports.favourites = async (req, res) => {
         { user_id: req.user._id },
         { $pull: { property_ids: prop_id } }
       );
-      return res.status(200).json({success : true, msg: "Removed from like" });
+      return res.status(200).json({ success: true, msg: "Removed from like" });
     }
 
   } catch (err) {
@@ -299,7 +312,6 @@ exports.getFavourites = async (req, res) => {
 
 // added recently viewed 
 
-// ✅ Final version: uses upsert to avoid VersionError
 exports.addToRecentlyViewed = async (req, res) => {
   try {
     const user_id = req.user._id;
