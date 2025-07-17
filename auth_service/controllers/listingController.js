@@ -176,29 +176,41 @@ exports.getListingsByIds = async (req, res) => {
 
 exports.createListing = async (req, res) => {
   try {
-    const body = req.body;
+    const body = req.body;    
     console.log("📥 Incoming listing payload:", body);
 
     const uploadedImages = req.files?.length
       ? req.files.map((file) => file.path)
       : JSON.parse(body.photos || "[]");
 
-    const {
-      title,
-      listingType,
-      propertyCategory,
-      location,
-      coordinates,
-      price,
-      priceD,
-      unit,
-      bedrooms,
-      bathrooms,
-      balcony,
-      facilities,
-    } = body;
+   const {
+  listingType,
+  propertyCategory,
+  propertyTitle,
+  location,
+  coordinates,
+  imageFiles, // optional if uploaded separately
+  bedrooms,
+  bathrooms,
+  balcony,
+  price,
+  unit,
+  shortDescription,
+  detailedDescription,
+  carpetArea,
+  carpetAreaUnit,
+  totalPerSq,
+  floor,
+  facing,
+  ownershipType,
+  furnished,
+  plotSize,
+  facilities,
+} = req.body;
 
-    const propertyTitle = title;
+console.log("req data = ", req.body);
+
+
 
     const parsedLocation = {
       address: location,
@@ -208,15 +220,17 @@ exports.createListing = async (req, res) => {
       typeof coordinates === "string" ? JSON.parse(coordinates) : coordinates;
     const parsedFacilities =
       typeof facilities === "string" ? JSON.parse(facilities) : facilities;
+      let amount = totalPerSq ? totalPerSq : price;
 
     const newProperty = new Listing({
       propertyTitle,
-      price: Number(price),
-      priceD,
+      price: Number(amount),
+      priceD :  Number(amount),
       postedDate: new Date(),
 
-      transactionType: listingType,
-      propertyType: propertyCategory,
+      listingType: listingType,
+      transactionType: propertyCategory,
+      carpetArea : plotSize,
       location: parsedLocation?.address || "",
       city: parsedLocation?.address?.split(",")?.slice(-2)?.[0]?.trim() || "",
 
@@ -236,8 +250,8 @@ exports.createListing = async (req, res) => {
         nonLuxury: Array.isArray(parsedFacilities) ? parsedFacilities : [],
       },
 
-      shortDescription: propertyTitle,
-      detailedDescription: `A beautiful ${propertyCategory} for ${listingType} located at ${parsedLocation?.address}`,
+      shortDescription: shortDescription,
+      detailedDescription: detailedDescription,
     });
 
     const saved = await newProperty.save();

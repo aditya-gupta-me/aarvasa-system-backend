@@ -45,6 +45,8 @@ const listingSchema = new mongoose.Schema({
     lng: String
   },
 
+
+
   detailedDescription: String,
   shortDescription: String,
 
@@ -54,6 +56,11 @@ const listingSchema = new mongoose.Schema({
     companyName: String,
     operatingSince: String,
     buyersServed: String
+  },
+
+  listingType : {
+    type : String,
+    required : true,
   },
 
   amenities: {
