@@ -49,6 +49,7 @@ app.use("/api/contact", require("./routes/contactRoutes"));
 app.use("/api/contact", require("./routes/contactRoutes"));
 app.use("/api/payment", require("./routes/paymentRoutes.js"));
 app.use("/api/user", require("./routes/userRoute.js"));
+app.use("/api/question",require("./routes/questionRoutes.js"));
 
 app.get("/", (req, res) => {
   res.send("ok");
