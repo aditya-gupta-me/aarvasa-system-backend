@@ -36,11 +36,20 @@ exports.signup = async (req, res) => {
 
 exports.verifyOtp = async (req, res) => {
   const { email, otp } = req.body;
+  console.log(email)
   const user = await User.findOne({ email });
 
-  if (!user || user.otp !== otp || user.otpExpiry < Date.now()) {
-    return res.status(401).json({ msg: "Invalid or expired OTP" });
+  if (!user) {
+    return res.json({ msg: "Unauthorized , no user found woth this email" });
   }
+
+  console.log("User otp : " + user.otp);
+  console.log(otp)
+
+
+  if (user.otp !== otp || user.otpExpiry < Date.now()) {
+      return res.json({ msg: "Invalid or expired OTP" });
+    }
 
   // Clear OTP
  user.otp = ""
