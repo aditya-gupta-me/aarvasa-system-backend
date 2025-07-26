@@ -40,15 +40,14 @@ exports.verifyOtp = async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    return res.json({ msg: "Unauthorized , no user found woth this email" });
+    return res.status(401).json({ msg: "Unauthorized , no user found woth this email" });
   }
 
-  console.log("User otp : " + user.otp);
-  console.log(otp)
 
 
-  if (user.otp !== otp || user.otpExpiry < Date.now()) {
-      return res.json({ msg: "Invalid or expired OTP" });
+
+  if (user.otp !== otp) {
+      return res.status(401).json({ msg: "Invalid or expired OTP" });
     }
 
   // Clear OTP
