@@ -176,39 +176,40 @@ exports.getListingsByIds = async (req, res) => {
 
 exports.createListing = async (req, res) => {
   try {
-    const body = req.body;    
+    const body = req.body;
     console.log("📥 Incoming listing payload:", body);
 
     const uploadedImages = req.files?.length
       ? req.files.map((file) => file.path)
       : JSON.parse(body.photos || "[]");
 
-   const {
-  listingType,
-  propertyCategory,
-  propertyTitle,
-  location,
-  coordinates,
-  imageFiles, // optional if uploaded separately
-  bedrooms,
-  bathrooms,
-  balcony,
-  price,
-  unit,
-  shortDescription,
-  detailedDescription,
-  carpetArea,
-  carpetAreaUnit,
-  totalPerSq,
-  floor,
-  facing,
-  ownershipType,
-  furnished,
-  plotSize,
-  facilities,
-} = req.body;
+    const {
+      listingType,
+      propertyCategory,
+      propertyTitle,
+      location,
+      coordinates,
+      imageFiles, // optional if uploaded separately
+      bedrooms,
+      bathrooms,
+      balcony,
+      price,
+      unit,
+      shortDescription,
+      detailedDescription,
+      carpetArea,
+      carpetAreaUnit,
+      totalPerSq,
+      floor,
+      facing,
+      ownershipType,
+      nearbyLandmarks,
+      furnished,
+      plotSize,
+      facilities,
+    } = req.body;
 
-console.log("req data = ", req.body);
+    console.log("req data = ", req.body);
 
 
 
@@ -220,17 +221,22 @@ console.log("req data = ", req.body);
       typeof coordinates === "string" ? JSON.parse(coordinates) : coordinates;
     const parsedFacilities =
       typeof facilities === "string" ? JSON.parse(facilities) : facilities;
-      let amount = totalPerSq ? totalPerSq : price;
+    let amount = totalPerSq ? totalPerSq : price;
 
     const newProperty = new Listing({
       propertyTitle,
       price: Number(amount),
-      priceD :  Number(amount),
+      priceD: Number(amount),
       postedDate: new Date(),
+      nearbyLandmarks: Array.isArray(nearbyLandmarks)
+        ? nearbyLandmarks
+        : typeof nearbyLandmarks === 'string'
+          ? JSON.parse(nearbyLandmarks)
+          : [],
 
       listingType: listingType,
       transactionType: propertyCategory,
-      carpetArea : plotSize,
+      carpetArea: plotSize,
       location: parsedLocation?.address || "",
       city: parsedLocation?.address?.split(",")?.slice(-2)?.[0]?.trim() || "",
 
