@@ -25,23 +25,33 @@ exports.getListings = async (req, res) => {
     // Mongo query
     const query = {};
 
-    if (filters.city) {
+    console.log("Search keyword received:", filters.city, typeof filters.city);
+
+    // Search only in propertyTitle
+    if (filters.city && typeof filters.city === "string" && filters.city.trim() !== "") {
       query.propertyTitle = { $regex: filters.city, $options: "i" };
     }
+
     if (filters.propertyType && filters.propertyType !== "All") {
       query.propertyType = filters.propertyType;
     }
+
     if (filters.transactionType && filters.transactionType !== "All") {
       query.transactionType = filters.transactionType;
     }
+
     if (filters.budget) {
       query.price = { $lte: parseInt(filters.budget) };
     }
 
-    const listings = await Listing.find(query).skip((page - 1) * limit)
+    // Fetch listings with pagination
+    const listings = await Listing.find(query)
+      .skip((page - 1) * limit)
       .limit(Number(limit));
 
+    // Total count for pagination
     const total = await Listing.countDocuments(query);
+
 
     // Cache it for 5 minutes
     // await redisClient.setEx(key, 300, JSON.stringify(listings));
@@ -185,7 +195,7 @@ exports.createListing = async (req, res) => {
 
     const {
       listingType,
-      propertyCategory,
+      propertyType,
       propertyTitle,
       location,
       coordinates,
@@ -235,7 +245,7 @@ exports.createListing = async (req, res) => {
           : [],
 
       listingType: listingType,
-      transactionType: propertyCategory,
+      propertyType: propertyType,
       carpetArea: plotSize,
       location: parsedLocation?.address || "",
       city: parsedLocation?.address?.split(",")?.slice(-2)?.[0]?.trim() || "",
