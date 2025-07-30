@@ -194,8 +194,9 @@ exports.createListing = async (req, res) => {
       : JSON.parse(body.photos || "[]");
 
     const {
-      listingType,
       propertyType,
+      transactionType,
+      listingType,
       propertyTitle,
       location,
       coordinates,
@@ -244,7 +245,7 @@ exports.createListing = async (req, res) => {
           ? JSON.parse(nearbyLandmarks)
           : [],
 
-      listingType: listingType,
+      transactionType: transactionType,
       propertyType: propertyType,
       carpetArea: plotSize,
       location: parsedLocation?.address || "",
