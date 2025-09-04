@@ -25,23 +25,33 @@ exports.getListings = async (req, res) => {
     // Mongo query
     const query = {};
 
-    if (filters.city) {
+    console.log("Search keyword received:", filters.city, typeof filters.city);
+
+    // Search only in propertyTitle
+    if (filters.city && typeof filters.city === "string" && filters.city.trim() !== "") {
       query.propertyTitle = { $regex: filters.city, $options: "i" };
     }
+
     if (filters.propertyType && filters.propertyType !== "All") {
       query.propertyType = filters.propertyType;
     }
+
     if (filters.transactionType && filters.transactionType !== "All") {
       query.transactionType = filters.transactionType;
     }
+
     if (filters.budget) {
       query.price = { $lte: parseInt(filters.budget) };
     }
 
-    const listings = await Listing.find(query).skip((page - 1) * limit)
+    // Fetch listings with pagination
+    const listings = await Listing.find(query)
+      .skip((page - 1) * limit)
       .limit(Number(limit));
 
+    // Total count for pagination
     const total = await Listing.countDocuments(query);
+
 
     // Cache it for 5 minutes
     // await redisClient.setEx(key, 300, JSON.stringify(listings));
@@ -176,39 +186,41 @@ exports.getListingsByIds = async (req, res) => {
 
 exports.createListing = async (req, res) => {
   try {
-    const body = req.body;    
+    const body = req.body;
     console.log("📥 Incoming listing payload:", body);
 
     const uploadedImages = req.files?.length
       ? req.files.map((file) => file.path)
       : JSON.parse(body.photos || "[]");
 
-   const {
-  listingType,
-  propertyCategory,
-  propertyTitle,
-  location,
-  coordinates,
-  imageFiles, // optional if uploaded separately
-  bedrooms,
-  bathrooms,
-  balcony,
-  price,
-  unit,
-  shortDescription,
-  detailedDescription,
-  carpetArea,
-  carpetAreaUnit,
-  totalPerSq,
-  floor,
-  facing,
-  ownershipType,
-  furnished,
-  plotSize,
-  facilities,
-} = req.body;
+    const {
+      propertyType,
+      transactionType,
+      listingType,
+      propertyTitle,
+      location,
+      coordinates,
+      imageFiles, // optional if uploaded separately
+      bedrooms,
+      bathrooms,
+      balcony,
+      price,
+      unit,
+      shortDescription,
+      detailedDescription,
+      carpetArea,
+      carpetAreaUnit,
+      totalPerSq,
+      floor,
+      facing,
+      ownershipType,
+      nearbyLandmarks,
+      furnished,
+      plotSize,
+      facilities,
+    } = req.body;
 
-console.log("req data = ", req.body);
+    console.log("req data = ", req.body);
 
 
 
@@ -220,17 +232,22 @@ console.log("req data = ", req.body);
       typeof coordinates === "string" ? JSON.parse(coordinates) : coordinates;
     const parsedFacilities =
       typeof facilities === "string" ? JSON.parse(facilities) : facilities;
-      let amount = totalPerSq ? totalPerSq : price;
+    let amount = totalPerSq ? totalPerSq : price;
 
     const newProperty = new Listing({
       propertyTitle,
       price: Number(amount),
-      priceD :  Number(amount),
+      priceD: Number(amount),
       postedDate: new Date(),
+      nearbyLandmarks: Array.isArray(nearbyLandmarks)
+        ? nearbyLandmarks
+        : typeof nearbyLandmarks === 'string'
+          ? JSON.parse(nearbyLandmarks)
+          : [],
 
-      listingType: listingType,
-      transactionType: propertyCategory,
-      carpetArea : plotSize,
+      transactionType: transactionType,
+      propertyType: propertyType,
+      carpetArea: plotSize,
       location: parsedLocation?.address || "",
       city: parsedLocation?.address?.split(",")?.slice(-2)?.[0]?.trim() || "",
 

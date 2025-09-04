@@ -60,7 +60,6 @@ const listingSchema = new mongoose.Schema({
 
   listingType : {
     type : String,
-    required : true,
   },
 
   amenities: {
