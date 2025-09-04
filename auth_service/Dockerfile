@@ -1,20 +1,9 @@
-# Use the official Node.js LTS image
-FROM node:18-alpine
+# /auth-service/Dockerfile
+FROM node:18
 
-# Set working directory
 WORKDIR /app
-
-# Copy only package files first to leverage Docker cache
-COPY package*.json ./
-
-# Install dependencies
-RUN npm install --only=production
-
-# Copy the rest of your app code
 COPY . .
+RUN npm install
 
-# Expose port your app runs on
 EXPOSE 5000
-
-# Start the application
-CMD ["node", "server.js"]
+CMD ["npx", "nodemon", "server.js"]
