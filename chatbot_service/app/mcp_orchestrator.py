@@ -1,7 +1,7 @@
 import openai
 from app.rag_engine import CompanyRAG, NavigationRAG
 
-MODEL = "llama3-8b-8192"
+MODEL = "llama-3.3-70b-versatile"
 MAX_CONTEXT_MESSAGES = 15
 
 system_instructions = (
